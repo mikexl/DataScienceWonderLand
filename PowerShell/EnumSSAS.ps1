@@ -1,6 +1,6 @@
 [System.Reflection.Assembly]::LoadWithPartialName("Microsoft.AnalysisServices") 
 $server = new-object Microsoft.AnalysisServices.Server 
-$server.Connect('your_ssas_server_instance')
+$server.Connect('dolphin:9000')
 
 #enumerate the databases, connections (data sources), Dimensions, cubes (including KPIs and Measure Groups) and roles
 $server.databases|%{
