@@ -7,21 +7,21 @@ go
 
 select UserID
 from users
-where username like 'your_login';
+where username like 't844523';
 
 select *
 from Subscriptions
-where OwnerID='E5C54268-FEE9-42B1-922F-93391B9E98F7'; -- the UserID from above
+where OwnerID='87C321CD-A0E9-4495-971F-3959478C46F6'; -- the UserID from above
 
 select *
 from ReportSchedule
-where SubscriptionID='C3563DC6-FAA7-4F1F-8D06-E0D8402416A5'; -- SubscriptionID from above
+where SubscriptionID='051579AB-D677-4B15-812F-2B4CD2014F24'; -- SubscriptionID from above
 
 select *
 from Schedule
-where ScheduleID='167BB1EB-89AC-4F1C-B1F0-90D318D30334'; -- ScheduleID from above
+where ScheduleID='13495560-641B-4839-8E5E-85EF8EA58389'; -- ScheduleID from above
 
 
 select *
 from msdb.dbo.sysjobs_view
-where name like '167BB1EB-89AC-4F1C-B1F0-90D318D30334';  --- Daily Report Agent Job
+where name like '13495560-641B-4839-8E5E-85EF8EA58389';  --- ScheduleID from above, that is the job name
