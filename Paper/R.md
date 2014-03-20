@@ -4,6 +4,8 @@ Interesting a table with 24,876 records eats about 3.3MB space in SQL Server but
 Linear model
 Cluster
 Time series  
-```{r}  
-summary(x)
+
+```{r basicconsole}  
+lm<-model(profit ~ region + sales_dept)
+summary(lm)
 ```
