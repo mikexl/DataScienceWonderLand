@@ -22,9 +22,13 @@ imports microsoft.sqlserver.server
 
 Partial Public Class UDFs
 
-  <SqlFunction()> public shared Function UTC2Pacific(dt AS SqlDateTime) AS SqlDateTime
+  <SqlFunction()>
+  public shared Function UTC2Pacific(dt AS SqlDateTime) AS SqlDateTime
     try
-      return IIF(DateTime.Parse(dt.Value).IsDayLightSavingTime(), DateTime.Parse(dt.Value).AddHours(-7), DateTime.Parse(dt.Value).AddHours(-8))
+      return IIF(DateTime.Parse(dt.Value).IsDayLightSavingTime(), 
+			DateTime.Parse(dt.Value).AddHours(-7), 
+			DateTime.Parse(dt.Value).AddHours(-8)
+		)
     catch
       return SqlDateTime.NULL
     end try
@@ -33,7 +37,8 @@ Partial Public Class UDFs
 
 ' A simple wrapper to check if a date is daylight saving
 
-  <SqlFunction()> public shared Function IsDaylightSaving(dt AS SqlDateTime) AS SqlBoolean
+  <SqlFunction()> 
+  public shared Function IsDaylightSaving(dt AS SqlDateTime) AS SqlBoolean
     return DateTime.Parse(dt.Value).IsDayLightSavingTime()
   end function
 
