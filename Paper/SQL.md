@@ -2,7 +2,7 @@
 Well a lot to say but this product only works on *Windows*.   
 SQL server is a fast growing product with lots new features introduced every year or couple.   
 The *LocalDB* works quite well as a developer instance on a local computer as the name says *local* database. It has 10GB file size limit but I don’t see it is a problem even in the *big data* buzz world. As mostly I use sample data set on local machine.   
-The *Analysis Services*, both multidimensional model and tabular model, I have been uaing them *real* in last few years. Quite happy with them. *In memory* technology may rule the empire now, however OLAP cubes still have its own place especially when your data just cannot be all fit into the memory.   
+The *Analysis Services*, both multidimensional model and tabular model, I have been using them *real* in last few years. Quite happy with them. *In memory* technology may rule the empire now, however OLAP cubes still have its own place especially when your data just cannot be all fit into the memory.   
 Worth to mention the old school favorites *sqlcmd* and *osql*
 
 ### MySQL
@@ -16,7 +16,7 @@ Recently, I have been using R quite a bit. So worth to mention that Postgres wor
 
 ### Oracle
 Oracle is everywhere if you work in a big company. Few things I like about Oracle are:  
-1. Open Source support, my first django app was buit with cx\_Oracle  
+1. Open Source support, indeed my first django app was buit with cx\_Oracle  
 2. APEX nice and simple web app  
 3. SQL Developer  
 4. SQL+ well, like it  
@@ -26,3 +26,6 @@ Well, cannot say too much rather than blu(e) hah. It works well on *mainframe* a
 
 ### SQLite
 Not really a server product. But if you program for Mac OS X or iOS, I assure you see it million times. Very lightweight desktop or embedded database option.  
+
+### Teradata
+It is the best choice for data warehouse as told by every genius and of course you have to be able to print money to have it. In that aspect, banks have it, government have it, some. And the big wal-mart and netflix. If you look for cheap play, there is a free express version. Unlike other express, it can handle up to one TB data but not computing power intensive task. On that note, a toy for play and on you sandbox. 
