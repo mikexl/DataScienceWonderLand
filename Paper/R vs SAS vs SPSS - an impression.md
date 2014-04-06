@@ -6,6 +6,6 @@ SPSS Modeler is a point-and-click, quite simple and easy to use in that term. Be
 ### Code
 
 ### Configuration
-**R**: Mac OS X Maverick, Quad Cores CPU, 8GB Memory, version 3.0.3  
-**SAS**: Solaris 10 SPARC, ?, ?, version 9.2  
-**SPSS Modeler**: Windows 2012 R2, Dual Cores CPU, 2GB Memory, version 16. 
+**R**: Mac OS X Maverick, Quad Cores CPU, 8 GB Memory, version 3.0.3  
+**SAS**: SPARC M5000, 64 GB Memory, Version 9.2  
+**SPSS Modeler**: forgot, provided by workshop
