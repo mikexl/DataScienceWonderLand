@@ -1,0 +1,43 @@
+### Elementary
+1. *Connect* to data sources (such as SQL server, Oracle, cube and Excel)
+2. Data table
+3. bar chart or line chart (TELUS Green 66CC00 | 102, 204, 0)
+4. Calculated fields
+5. *Table calculation* , for instance, percent of total, running total
+6. *Date* hierarchy
+7. (Quick) *filter*
+8. Parameter - what if analysis
+9. Action
+10. Dashboard
+11. Publish report to server
+12. Export data (CSV, image, crosstab)
+
+### Viz
+Good ? Bad? 
+
+Idea: Show and tell then open discussion
+Canadian Map
+Tree map
+Box plot
+Outlier ?
+
+### Data Prep
+*Data blending* - does not really work, so don’t do it. Recommend to do it at dta siurce or query level. 
+*Calculated fields*, similiar to Excel
+
+
+### Standardization
+Font
+Colour (TELUS palette) 
+Branding
+Filter
+
+Target audience (always know your audience when designing a visual)
+- Executives
+- directors
+- ops mangar, team managers and analyst
+
+Metric defition, recommend to have it on a separate workbook or wiki page.   
+Naming conventions. 
+Permission settings. 
+
