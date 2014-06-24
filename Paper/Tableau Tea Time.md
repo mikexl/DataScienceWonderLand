@@ -25,11 +25,12 @@ The goal is to *tell a story*. So focus on that and experiment all the chart typ
 
 
 ### Standardization
-Font
-Colour (TELUS palette) 
-Branding
-Layout
-Naming conventions
+- Font
+- Colour (TELUS palette) 
+- Branding
+- Layout
+- Naming conventions
+- Metric definition and data dictionary, recommend to have it on a separate workbook or wiki page
 
 ### Target Delivery
 Know your Audience (always know your audience when designing a visual)
@@ -37,7 +38,4 @@ Know your Audience (always know your audience when designing a visual)
 - directors
 - ops mangar, team managers and analyst
 - Peer
-
-Metric definition, recommend to have it on a separate workbook or wiki page.   
-Permission settings
 
