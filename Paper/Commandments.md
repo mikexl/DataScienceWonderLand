@@ -41,6 +41,19 @@ In another word, pay attention to the details
 
 "The world is full of obvious things which nobody by any chance ever observes." ... Sherlock Holmes
 
+"You see, but you do not observe. The distinction is clear." ... SH
+
+
+## making story
+Making story is not the same as making things up.
+
+"It is a capital mistake to theorize before one has data. Insensibly one begins to twist facts to suit theories, instead of theories to suit facts." ... Sherlock Holmes
+
 "Insufficient facts always invite danger." ... Spock
 
 
+
+
+![Live Long and Prosper][Vulcan]
+
+[vulcan]: https://pbs.twimg.com/media/CA_0CFVUkAAFu5G.png
