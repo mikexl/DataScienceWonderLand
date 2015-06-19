@@ -1,5 +1,12 @@
 Commandments
 ======
+1. Respect
+2. Backup
+3. Versions
+4. Life's short
+5. Simplicity
+6. Challenge
+7. Observe
 
 ## respect the power, respect others
 I often copy "great power comes with great responsibilities" when I send super user privilige to others. As when one join that admin council, it becomes the responsibility to look after each other, and look after the one you serving.
