@@ -3,11 +3,14 @@ Commandments
 
 ## respect the power, respect others
 I often copy "great power comes with great responsibilities" when I send super user privilige to others. As when one join that admin council, it becomes the responsibility to look after each other, and look after the one you serving.
+
 When making any changes, consult prior action. 
+
 When in doubt, ask
 
 ## backup is your friend
-yes, how many times stupid moves have been made and wish there was a backup. Yes, make your own wish becomes true.
+yes, how many times stupid moves have been made and wish there was a backup. 
+Yes, make your own wish becomes true.
 
 ## version control is your other friend
 how many times, our own code been mess up by the same person, and shout at the wall f~!@#$%^&
@@ -18,7 +21,9 @@ It took me a long time to figure this one secret out. There are lotsa other beau
 
 ## simplicity
 "Everything Should Be Made as Simple as Possible, But Not Simpler" ... Einstein
+
 "Simple things should be simple, complex things should be possible" ... Alan Kay
+
 "It takes a lot of hard work," Jobs said, "to make something simple, to truly understand the underlying challenges and come up with elegant solutions."
 
 ## challenge
@@ -26,7 +31,9 @@ It took me a long time to figure this one secret out. There are lotsa other beau
 
 ## observation
 In another word, pay attention to the details
+
 "The world is full of obvious things which nobody by any chance ever observes." ... Sherlock Holmes
+
 "Insufficient facts always invite danger." ... Spock
 
 
