@@ -54,10 +54,13 @@ Making story is not the same as making things up.
 
 "Insufficient facts always invite danger." ... Spock
 
-
-
+## Bonus
+Visualization is considered both angel and demon for story telling. 
+Just learnt that tableau killed their public premium product, instead give the benefit to everyone - 10 million records and 10GB storage space... wow. [My tableau public profile][2].
 
 ![Live Long and Prosper][Vulcan]
 
 [vulcan]: https://pbs.twimg.com/media/CA_0CFVUkAAFu5G.png
 [1]: http://mjliu.com/git "Breezy Git"
+[2]: http://public.tableau.com/profile/mike "Tableau Public - Mike"
+[3]: http://public.tableau.com/profile/mike "Tableau Public - Spock"
