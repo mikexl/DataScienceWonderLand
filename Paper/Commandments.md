@@ -20,8 +20,9 @@ yes, how many times stupid moves have been made and wish there was a backup.
 Yes, make your own wish becomes true.
 
 ## version control is your other friend
-how many times, our own code been mess up by the same person, and shout at the wall f~!@#$%^&
-if you have a version control and have every changes checked in, you CAN travel back in time.
+how many times, our own code been mess up by the same person, and shout at the wall f~!@#$%^&.
+Imagine if you have a version control and have every changes checked in, you CAN travel back in time. 
+A little post about my love of git - [Breezy Git][1]. 
 
 ## life's short
 It took me a long time to figure this one secret out. There are lotsa other beautiful things out there rather than work and technologies.
@@ -59,3 +60,4 @@ Making story is not the same as making things up.
 ![Live Long and Prosper][Vulcan]
 
 [vulcan]: https://pbs.twimg.com/media/CA_0CFVUkAAFu5G.png
+[1]: http://mjliu.com/git "Breezy Git"
