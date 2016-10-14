@@ -1,0 +1,23 @@
+﻿<PMML version="4.1" xmlns="http://www.dmg.org/PMML-4_1" xmlns:xsi="http://www.w.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.dmg.org/PMML-4_1 htp://www.dmg.org/v4-1/pmml-4-1.xsd">
+ <Header copyright="Copyright (c) 2014 M." description="Linear Regressionodel">
+  <Extension name="user" value="t844523" extender="Rattle/PMML"/>
+  <Application name="Rattle/PMML" version="1.4"/>
+  <Timestamp>2014-04-09 21:44:17</Timestamp>
+ </Header>
+ <DataDictionary numberOfFields="2">
+  <DataField name="log(Dive)" optype="continuous" dataType="double"/>
+  <DataField name="log(Brain)" optype="continuous" dataType="double"/>
+ </DataDictionary>
+ <RegressionModel modelName="Linear_Regression_Model" functionName="regression" algorithmName="least squares">
+  <MiningSchema>
+   <MiningField name="log(Dive)" usageType="predicted"/>
+   <MiningField name="log(Brain)" usageType="active"/>
+  </MiningSchema>
+  <Output>
+   <OutputField name="Predicted_log(Dive)" feature="predictedValue"/>
+  </Output>
+  <RegressionTable intercept="-3.05081135211963">
+   <NumericPredictor name="log(Brain)" exponent="1" coefficient="0.73309822517458"/>
+  </RegressionTable>
+ </RegressionModel>
+</PMML>
