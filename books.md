@@ -11,3 +11,4 @@
 * Gelman - Bayesian Data Analysis
 * Introducing Monte Carlo Methods with R
 * Advanced Algo Trading
+* Super Crunchers
