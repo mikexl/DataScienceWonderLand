@@ -1,0 +1,103 @@
+---
+title: 'R2: Peer-graded Assignment: Course Project 2'
+author: "M."
+date: "`r format(Sys.Date(), '%d %B, %Y')`"
+output: 
+  html_document:
+    theme: paper
+    include_header: ga_track.html
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(ggvis)
+```
+## Synopsis
+
+Purpose of this analysis is to explore the storm data collected between 1950 and 2011 to identify the most harmful event respective to human or economic cost.
+
+## Introduction
+
+Storms and other severe weather events can cause both public health and economic problems for communities and municipalities. Many severe events can result in fatalities, injuries, and property damage, and preventing such outcomes to the extent possible is a key concern.
+
+This project involves exploring the U.S. National Oceanic and Atmospheric Administration's (NOAA) storm database. This database tracks characteristics of major storms and weather events in the United States, including when and where they occur, as well as estimates of any fatalities, injuries, and property damage.
+
+## Data
+The data for this assignment come in the form of a comma-separated-value file compressed via the bzip2 algorithm to reduce its size. You can download the file from the course web site:
+
+* [Storm Data][1] [47Mb]
+There is also some documentation of the database available. Here you will find how some of the variables are constructed/defined.
+
+* National Weather Service [Storm Data Documentation][2]
+* National Climatic Data Center Storm Events [FAQ][3]
+The events in the database start in the year 1950 and end in November 2011. In the earlier years of the database there are generally fewer events recorded, most likely due to a lack of good records. More recent years should be considered more complete.
+
+## Data Processing
+
+```{r}
+storm.url = "https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2"
+storm.file = "storm.csv.bz2"
+download.file(storm.url, storm.file)
+
+storm.df <- read.csv(storm.file)
+```
+
+## Basic Exploration
+
+#### Variable list
+```{r}
+str(storm.df)
+```
+
+#### Summary of event types, fatalities, injuries, property damages and crop damages
+```{r}
+summary(storm.df$EVTYPE)
+summary(cbind(fatality=storm.df$FATALITIES, injury=storm.df$INJURIES, property.damage = storm.df$PROPDMG, crop.damage=storm.df$CROPDMG))
+```
+
+## Results
+
+#### Questions from Assignment
+1. Across the United States, which types of events (as indicated in the \color{red}{\verb|EVTYPE|}EVTYPE variable) are most harmful with respect to population health?
+
+```{r}
+storm.df %>% 
+          group_by(EVTYPE) %>% 
+          summarise(fat = sum(FATALITIES), inj = sum(INJURIES), pop.health = sum(FATALITIES + INJURIES)) %>% 
+          top_n(10, pop.health) %>%
+          ggvis(~EVTYPE, ~pop.health, text := ~EVTYPE) %>% layer_text(fontSize := 10)
+```
+Based on the above top 10 events respetive to injuries or fatalities, _Tornado_ appears to be the most harmful one.
+
+2. Across the United States, which types of events have the greatest economic consequences?
+
+```{r warning=FALSE}
+# recode the factor of property and crop damage factor
+#    h/H ... hundreds
+#    k/K ... thousands
+#    m/M ... millions
+#    b/B ... Billions
+#    -+? ... unknown, key as 0 for now
+#
+storm.df$prop.dmg <- recode(storm.df$PROPDMG, `h`=2, `H`=2, `k`=3, `K`=3, `m`=6, `M`=6, `b`=9, `B`=9, `-`=0, `?`=0, `+`=0)
+storm.df$crop.dmg <- recode(storm.df$CROPDMG, `h`=2, `H`=2, `k`=3, `K`=3, `m`=6, `M`=6, `b`=9, `B`=9, `-`=0, `?`=0, `+`=0)
+
+storm.df %>% 
+          group_by(EVTYPE) %>% 
+          summarise(prop = sum(PROPDMG * crop.dmg), 
+                    crop = sum(CROPDMG * prop.dmg), 
+                    eco.cost = sum(PROPDMG * crop.dmg + CROPDMG * prop.dmg)) %>% 
+          top_n(10, eco.cost) %>%
+          ggvis(~EVTYPE, ~eco.cost, text := ~EVTYPE) %>% layer_text(fontSize := 10)
+
+```
+Respective to property or crop damages, floods appear to be the top harmful event. 
+
+
+
+
+[1]: https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2
+[2]: https://d396qusza40orc.cloudfront.net/repdata%2Fpeer2_doc%2Fpd01016005curr.pdf
+[3]: https://d396qusza40orc.cloudfront.net/repdata%2Fpeer2_doc%2FNCDC%20Storm%20Events-FAQ%20Page.pdf
