@@ -1,0 +1,43 @@
+---
+title: "Python"
+author: "M. Liu"
+date: "November 18, 2015"
+output: html_document
+---
+
+here are some of the resources for python.
+
+[Pycon 2015 youtube videos][1]  
+
+[Programmer Resources][2]  
+
+[IDEs][3], well my favorite editor *vi* would stand still, second favorite is [Python Tools for Visual Studio][4]  
+
+Here comes to the testing field, [testing tools taxonomy][5]
+
+Distributions
+[Conda][6]  
+[Active Python][7]  
+
+Some *interesting tools*:   
+[Jupyter][10] (came from ipython notebook)    
+[Azure ML Notebook][9] this may not be much of help if you are not in azure cloud, or not in data science field
+
+tl;dr  
+Try it yourself [here][8]
+
+easy lesson from [codecademy][https://www.codecademy.com/learn/python]
+
+
+
+
+[1]: https://www.youtube.com/channel/UCgxzjK6GuOHVKR_08TT4hJQ "Pycon 2015"
+[2]: https://wiki.python.org/moin/BeginnersGuide/Programmers "resources"
+[3]: https://wiki.python.org/moin/IntegratedDevelopmentEnvironments "IDE"
+[4]: https://www.visualstudio.com/en-us/features/python-vs.aspx "Python Tools for Visual Studio"
+[5]: https://wiki.python.org/moin/PythonTestingToolsTaxonomy "Testing Tool"
+[6]: http://conda.pydata.org/docs/intro.html
+[7]: http://www.activestate.com/activepython
+[8]: https://try.jupyter.org/ "Try Jupyter"
+[9]: http://studio.azureml.net
+[10]: http://jupyter.org/

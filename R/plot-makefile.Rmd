@@ -1,0 +1,40 @@
+###Visualize _makefile_  
+
+Simply copy code from [this][1] r-blogger post.
+
+```{r}
+library(tm)
+library(igraph)
+
+## Read makefile into R
+makefile <- readLines("/tmp/makefile.1")
+
+
+## Find relevant lines in makefile
+dep <- grep(":", makefile, value = TRUE)
+
+## Select target files
+target <- gsub(":.*", "", dep)
+
+## Select files target depends on
+depends <- gsub(".*:", "", dep)
+depends <- strsplit(depends, " ")
+names(depends) <- target
+
+
+## Create a dependency matrix (using igraph package)
+dlist <- lapply(target, function(t) {
+  d <- if(length(depends[[t]]) == 0) NA else depends[[t]]
+  data.frame(depends = d, target = t)
+})
+dependencymat <- na.omit(do.call("rbind", dlist))
+dependencymat <- dependencymat[dependencymat$depends != "", ]                         
+makegraph <- graph.data.frame(dependencymat)
+
+## ... and plot
+plot(makegraph, vertex.shape = "none", edge.arrow.size = 0.5)
+```
+
+
+
+[1]: https://www.r-bloggers.com/visualizing-makefiles/ 

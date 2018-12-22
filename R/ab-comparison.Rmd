@@ -1,0 +1,15 @@
+### A simple a/b comparison
+Compare two possion group counts
+
+```{r}
+N = 20000
+c1 = 305
+c2 = 244
+a = rgamma(1000,c1, rate=(N+1))
+b = rgamma(1000, c2, rate=(N+1))
+plot(density(a), col="purple", lty=1, xlim=c(0, .03), ylim=c(0, 600), xlab="N=1000", ylab="", axes=F, frame=F, main="density of prior in purple, post in gree")
+lines(density(b), col="green", lty=2)
+legend("topright", c("prior", "post"), col=c("purple", "green"), lty=c(1,2), box.lty=0)
+
+
+```

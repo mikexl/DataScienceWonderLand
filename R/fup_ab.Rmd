@@ -1,0 +1,42 @@
+---
+title: "How to @#$! up A/B experiment"
+subtitle: "An quick write from the internet"
+author: "MJ Liu"
+date: "`r Sys.Date()`"
+output:
+  tufte::tufte_html: default
+  tufte::tufte_handout:
+    citation_package: natbib
+    latex_engine: xelatex
+  tufte::tufte_book:
+    citation_package: natbib
+    latex_engine: xelatex
+bibliography: skeleton.bib
+link-citations: yes
+---
+
+```{r setup, include=FALSE}
+library(tufte)
+# invalidate cache when the tufte version changes
+knitr::opts_chunk$set(tidy = FALSE, cache.extra = packageVersion('tufte'))
+options(htmltools.dir.version = FALSE)
+```
+
+
+After reading some a/b testing online, thought to write down what has been mentioned
+
+1. Doing it at wrong place, sampling bias
+2. no patient or indulgent; not wait long enough or wait too long, just to see p < .05
+3. crappy hypothesis
+4. measure it wrong, wrong KPI
+5. too many experiments f$@% up each other
+6. not using a control group or not having one
+7. not account temporal effect or seasonality
+8. God's at work. There always environment factors that we don't know
+9. Believe in result that is too good to be true, be critic
+
+
+  
+![][1]
+
+[1]: /tmp/fup.jpeg

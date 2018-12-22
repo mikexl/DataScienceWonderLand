@@ -1,0 +1,281 @@
+---
+title: "AB Testing"
+author: "M. Liu"
+date: "May 13, 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
+```
+## Abstract
+
+[A/B testing][3], as we all know it, a method to split the sample into two - _control_ group and _treatment_ (experimental) group to test the designate _hypothesis_.
+
+It usually involves data collection, exploration and analysis to form the _hypothesis_ and estimate the required sample size. With those information in hand, the experimental design starts to create the test plan. 
+
+To actually run the tests, researchers divide them into two - classical _frequentist_ testing procedures such as t.test, chisq test, anova and so on, and the new kid _bayesianism_ that usually involves (monte carlo) simulations and selection of _prior_.
+
+### 1. Hypothesis and experimental design
+
+"If _____[I do this] _____, then _____[this]_____ will happen."
+
+couple keywords: 
+randomized samples
+_controlled variables_ (or explanatory variables) that can be manipulated for the treatment group
+_outcome variables_, these are the variables for results variance check. 
+
+Experimental design, or design of experiments (DoE)
+Main concerns in experimental design include the establishment of validity, reliability, and replicability.
+
+[Lady Tasting Tea Experiment][9]
+
+the three types of experiments based on the level of control  
+1. Laboratory (Controlled) Experiments  
+2. Field Experiments  
+3. Natrual Experiments (observations)  
+
+the method on experiments, [here][10] are few good ones  
+1. independent group (two random group )  
+2. repeated measure (same partipants, same measure on different condition/treatment) for instance, the performance before/after the software upgrade for same hardwares, study efficiency before/after treating the participants. the key for repeated measure is that same group of objects being studied for the change (before and after)   
+3. matched pair (two random group with matching gender, age, etc. etc.). this is similar idea to above 2 but does not have the same pain as the order effect (concern)  
+
+The method 1 is much easier to get into, while 3 is a hardest as identifying all the necessary variables not an easy and fast job, could be very time consuming. While, method 2 is ideal if there is no sequence (order) concern on the conditions. 
+
+
+### 2. Sample Size Estimation
+It usually comes with these default settings
+
+Confidence Level: $\alpha = .95$  
+
+Statistical Power:  $1-\beta = .80$
+
+#### 2.1 Sample size for two (binomial) proportions
+$n > (\frac{1.96 * .5} { M })^2 - 4$  
+or eventually this becomes a good and simpler estimate $n = \frac{4} {(p_1 - p_2)^2}$
+
+#### 2.2 Sample size for two (poisson) counts
+$n = \frac{4}{(\sqrt{\lambda_1} - \sqrt{\lambda_2})^2}$
+
+There is a simulation approach in order to get required sample size. 
+
+
+### 3. Statistical Test
+
+People say any tests would do, and people have different preference on choosing frequentist vs. bayesian. Or simply run an _glm_.
+Here is one [tool][4]
+
+#### 3.1 Proportion Test (counterpart of chi-sq test)
+Consider you would like to test out and which color would be favored by customers, so you have designed two buttons - green button and purple buttons, then routed 1000 customer visits to each, and you found green button been clicked 500 times and 550 for the purple.
+
+Now the question comes, which one should we use? Purple one? What are the chances (probabilites) for purple button to beat the green?
+
+```{r}
+N = 10000
+
+trial1 = 1000
+success1 = 500
+
+trial2 = 1000
+success2 = 550
+
+prior.trial = 1
+prior.success = 1
+
+
+
+x <- rbeta(N, success1 + prior.success, trial1 - success1 + prior.trial)
+y <- rbeta(N, success2 + prior.success, trial2 - success2 + prior.trial)
+
+```
+
+```{r echo=FALSE}
+max.dec = as.integer(log10(sqrt(N)))
+
+xy <- cbind(x, y)
+
+# quantile(x, c(.025, .975))
+# quantile(y, c(.025, .975))
+
+clm.x <- round(qbeta(c(.025, .975), success1 + prior.success, trial1 - success1 + prior.trial), max.dec)
+clm.y <- round(qbeta(c(.025, .975), success2 + prior.success, trial2 - success2 + prior.trial), max.dec)
+
+cat("Confidence Interval for x: ", clm.x, "\n")
+cat("Confidence Interval for y: ", clm.y, "\n")
+
+cat("Probability of y > x ", round(sum(y > x) /N, max.dec) * 100, "%\n")
+cat("power = ", round(sum(y > quantile(x, .975)) / N, max.dec) * 100, "%\n")   # rough power
+# sum(y > qbeta(.975, success1+1, trial1-success1+1)) /N
+
+suppressMessages(require(ggvis))
+
+df <- data.frame(x, y)
+df %>% 
+    ggvis(~x, ~y) %>% 
+  layer_histograms(~x, fill:="#49166d")  %>% 
+  layer_histograms(~y, fill:="#66cc00")
+
+
+cat("X in purple, Y in green \n")
+```
+
+#### 3.2 Count Data (counterpart to fisher?)
+Now consider you have two group of people, same number of people for each group. and both group fished the same day in the same area. Group I got 20 fish, while 25 been caught by group II. Now you would like to know which group did better on fishing? Group II? and what is the probability that group II catching more fish than group I? Furthermore, what are the probability for group II to catch 10% more fish than group I? 
+
+```{r}
+prior.c = 2
+prior.n = 1
+
+c1 = 20
+n1 = 1
+
+c2 = 25
+n2 = 1
+
+
+a <- rgamma(N, c1 + prior.c, n1 + prior.n)
+b <- rgamma(N, c2 + prior.c, n2 + prior.n)
+
+```
+```{r echo=FALSE}
+ab <- cbind(a, b)
+
+clm.a <- round(qgamma(c(.025, .975), c1 + prior.c, n1 + prior.n), max.dec)
+clm.b <- round(qgamma(c(.025, .975), c2 + prior.c, n2 + prior.n), max.dec)
+
+cat("Confidence Interval for a: ", clm.a, "\n")
+cat("Confidence Interval for b: ", clm.b, "\n")
+
+cat("Probability of b > a ", round(sum(b > a) / N, max.dec) * 100, "%\n")
+cat("power = ", round(sum(b > quantile(a, .975)) / N, max.dec) * 100, "%\n")   # rough power
+
+# sum(b > qgamma(.975, c1 + prior.c, n1 + prior.n)) /N
+
+
+df <- data.frame(a,b)
+df %>% 
+    ggvis(~a, ~b) %>% 
+  layer_histograms(~a, fill:="#49166d")  %>% 
+  layer_histograms(~b, fill:="#66cc00")
+
+
+cat("A in purple, B in green")
+
+#quantile(a, c(.025, .975))
+#quantile(b, c(.025, .975))
+
+
+boxplot(cbind(a, b), horizontal=T)
+
+```
+
+
+#### 3.3 (normal) data
+if the data actually follows normal distribution, then ...
+the [Bayesian t.test][11]
+
+### 4. Peek-ah-Boo
+Is bayesian immuned from peeking? 
+How bad to peek during the test? 
+P-value trend ?
+
+### 5. GLM - the swiss army knife
+As discussed above, be it binomial proportions, poisson counts or normal, glm has it all. Is glm the swiss army knife? Can it actually cut all the cheese?
+
+Now let's have some fun with sas code. Same example as above, but we run glm this time.
+
+```
+/*#1. the green/purple button - binomial proportions*/
+
+data ab1;
+	input success trial trt $;
+	datalines;
+	500 1000 A
+	550 1000 B
+;
+run;
+
+proc genmod data=ab1;
+	class trt;
+	model success/trial = trt /dist=bin;
+	lsmeans trt / diff cl plots=all;
+	title "classic";
+run;
+
+proc genmod data=ab1;
+	class trt;
+	model success/trial = trt /dist=bin;
+	bayes out=o1;
+	lsmeans trt / diff cl plots=all;
+	title "new kid";
+run;
+```
+
+```
+/*#2. the fishing poisson counts*/
+data ab2;
+	input c n trt $;
+	ln = log(n);
+	datalines;
+  20 1 A
+  25 1 B
+;
+run;
+
+proc genmod data=ab2;
+	class trt;
+	model c = trt /offset=ln dist=poi;
+	lsmeans trt / diff cl plots=all;
+	title "classic";	
+run;
+
+
+proc genmod data=ab2;
+	class trt;
+	model c = trt /offset=ln dist=poi;
+	bayes out=o2;
+	lsmeans trt / diff cl plots=all;
+	title "new kid";	
+run;
+
+```
+
+It is actually much cleaner to run the glm in R with using either _glm_ or _bayesglm_ (from arm package).
+
+```{r}
+ab1 <- as.data.frame(rbind(c(500, 1000, 1), c(550, 1000, 0)))
+ab2 <- as.data.frame(rbind(c(20, 1, 1), c(25, 1, 0)))
+
+names(ab1) <- c("success", "trial", "trt")
+names(ab2) <- c("c", "n", "trt")
+
+suppressMessages(require(lsmeans))
+suppressMessages(require(arm))
+
+lm.ab1 <- glm(cbind(success, trial-success) ~ factor(trt), data=ab1, family=binomial)
+lm.ab2 <- glm(c ~ factor(trt), offset=log(n), data=ab2, family=poisson)
+lsmeans(lm.ab1, "trt")
+lsmeans(lm.ab2, "trt")
+plot(lsmeans(lm.ab1, "trt"))
+plot(lsmeans(lm.ab2, "trt"))
+
+
+blm.ab1 <- bayesglm(cbind(success, trial-success) ~ trt, data=ab1, family=binomial)
+blm.ab2 <- bayesglm(c ~ trt, offset=log(n), data=ab2, family=poisson)
+# sim.ab1 <- sim(blm.ab1)
+# sim.ab2 <- sim(blm.ab2)
+
+```
+
+
+[1]: https://www.optimizely.com/ab-testing/ "A/B Testing Concept"
+[2]: https://vwo.com/ab-testing/ "A/B Testing Concept"
+[3]: https://en.wikipedia.org/wiki/A/B_testing "A/B Testing Definition"
+[4]: http://www.evanmiller.org/ab-testing/poisson-means.html "A/B Testing Tool"
+[5]: https://www.statstodo.com/SSiz2Counts_Tab.php "Sample size for two counts"
+[6]: https://www.stat.ubc.ca/~rollin/stats/ssize/b2.html "Sample Size calculator"
+[7]: http://powerandsamplesize.com/Calculators/ "Another Sample Size calculator"
+[8]: https://en.wikipedia.org/wiki/Design_of_experiments "Experimental design"
+[9]: https://en.wikipedia.org/wiki/Lady_tasting_tea "Lady tasting tea experiment"
+[10]: http://www.simplypsychology.org/experimental-designs.html "experimental design"
+[11]: http://www.sumsar.net/best_online/ "BEST bayes t.test"

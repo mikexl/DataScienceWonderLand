@@ -1,0 +1,46 @@
+---
+title: "Edx Kaggle - Predict Voting"
+author: "M."
+date: "June 14, 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+load("train2016.rda")
+```
+
+## Bayes Feature Selection
+Calculate importancy based on the distribution of the sign, i.e. how far the variable is from 0. From the histogram of the two variable #215 and #216, we could tell, that #215 coefficiency is close to 0, i.e. nearly not making any effect, therefore could be ignored.
+
+```{r}
+
+library(arm)
+
+m = bayesglm(Party ~ . - USER_ID, train2016, family=binomial)
+m.sim = sim(m, 10000)
+coef.m.sim = coef(m.sim)
+
+for(i in 1:ncol(coef.m.sim)){
+  imp <- sum(coef.m.sim[,i] > 0)/10000
+   if(imp > .95 | imp < .05){
+      cat(i, colnames(coef.m.sim)[i], imp, "\n")
+   }
+}
+
+par(mfrow=c(1,2))
+hist(coef.m.sim[,215], breaks=50, main="variable #215", freq=T)
+hist(coef.m.sim[,216], breaks=50, main="variable #216", freq=T)
+
+```
+
+## Random Forest Feature Selection
+```{r eval=FALSE}
+library(randomForest)
+library(rpart)
+
+rf = randomForest(Party ~ . - USER_ID, train2016, na.action=na.rpart, ntree=5000, nodesize=10)
+varImpPlot(rf)
+
+```
+## Feature Extraction

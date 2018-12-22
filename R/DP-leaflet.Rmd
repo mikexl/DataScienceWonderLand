@@ -1,0 +1,22 @@
+---
+title: "DP I - leaflet map"
+author: "M. Liu"
+date: "December 13, 2018"
+output: 
+  html_document:
+    theme: paper
+    include_header: ga_track.html
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F)
+library(leaflet)
+```
+
+```{r}
+m <- leaflet() %>%
+    addTiles() %>%
+    addMarkers(lat=49.2848477, lng = -123.1164876, popup = "best cheese in town")
+
+m
+```

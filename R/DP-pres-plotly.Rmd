@@ -1,0 +1,23 @@
+---
+title: "Week 3 - presentation with plotly"
+author: "M. Liu"
+date: "December 13, 2018"
+output: 
+  ioslides_presentation:
+    widescreen: true
+    transition: slower
+    
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(plotly)
+```
+
+## Fun with economics
+
+```{r}
+plot_ly(economics, x = ~date, color = I("black")) %>%
+ add_lines(y = ~uempmed) %>%
+ add_lines(y = ~psavert, color = I("red"))
+```

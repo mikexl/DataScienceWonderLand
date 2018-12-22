@@ -1,0 +1,155 @@
+---
+title: "Stats for Hackers"
+author: "M. Liu"
+date: "October 1, 2015"
+output: html_document
+---
+#0. Introduction
+It is all started from this one speaker deck of [Statistics for Hackers][1] that Colin has shared with us. It has covered the topis below, I have inserted some of the bayesian analysis into each section as the author did mention that he would like to do and *Bayesianism* is the new _sexy_ in this field now.
+
+For each section it comes with _classic_ frequentism test, _simulation_ and _bayesian_ when available.
+
+1. hypothesis test
+2. split testing aka A/B testing
+3. bootstraping
+4. cross validation
+
+_Disclaimer_: by no means, any of the below analysis and code would be accurate, it was created for fun after reading through the deck. Therefore, ..., would appreciate any feedback, and if you think they are good for your use, go for it.
+
+#1. Warm-up: coin toss hypothesis testing
+22 heads out of 30 coin tosses.
+Is it a fair coin? 
+How probable to get that?
+
+### 1.1 Classic Frequentist
+I could never set my head with those equations, here is the existing function to call and do the propotion test then read the _p value_
+```{r, warning=FALSE}
+prop.test(22, 30, 0.05)
+```
+
+### 1.2 Simulation
+This seems to be quite straigtforward, but does require a lot computing power if we have fairly large sample size, probably won't be much practical. In addition, there are a lot existing simulation packages there, that'll save the hassle on coding. For instance _MCMCpack_ for Markov Chain Monte Carlo (*mcmc*) simulation.
+
+```{r, warning=FALSE}
+N <- 10000
+x <- NULL
+
+for(i in 1:N){
+  x[i] <- ifelse(sum(sample(c(0,1), 30, replace=T))>=22, 1, 0)
+}
+
+sum(x)/N
+
+```
+
+# 2. Sneetches of Split Testing
+
+### 2.1 Classic Student's T Test
+```{r, warning=FALSE}
+y1 <- c(84, 72, 57, 46, 63, 76, 99, 91)
+y2 <- c(81, 69, 74, 61, 56, 87, 69, 65, 66, 44, 62, 69)
+par(mfrow=c(1,2))
+hist(y1)
+hist(y2)
+boxplot(as.data.frame(cbind(y1, y2)))
+t.test(y1, y2)
+
+```
+
+### 2.2 Bayesian EStimates
+The BEST (Bayesian Estimates Supersed t.test) is one of the interesting package. However for serious research and testing, may better off writting *mcmc*
+
+```{r, warning=FALSE, fig.height=9}
+require(BEST, quietly = T)
+best.sneetches <- BESTmcmc(y1, y2)
+#summary(best.sneetches)
+plotAll(best.sneetches)
+```
+
+### 2.3 Bayesian Factor
+the interpretation of the results is shown in wikipedia page - [Bayes Factor][2]
+
+Posterior odd &#x221D; Prior odd * Bayes Factor (likelihood ratio)
+
+
+Here is the factor: 
+```{r, warning=FALSE}
+require(BayesFactor, quietly = T)
+bf.sneetches.nopost <- ttestBF(y1, y2)
+summary(bf.sneetches.nopost)
+```
+
+Here is the fancy plots, what does it mean? You tell me.
+```{r}
+bf.sneetches <- ttestBF(y1, y2, posterior = TRUE, iterations = 10000)
+plot(bf.sneetches)
+```
+
+### 2.4 shuffling and resampling
+difference of the sample mean, and test the standard deviation.
+```{r, warning=FALSE}
+mean(y1) - mean(y2)
+sd(y1) == sd(y2)
+```
+
+```{r, warning=FALSE}
+
+ys <- c(y1, y2)
+mean_diff <- NULL
+N <- 10000
+
+# drawing random samples out of combined dataset, calculate the mean difference
+# repeated for 10,000 times
+for(i in 1:N){
+  idx <- sample(1:length(ys), 20, replace = F)
+  yy <- as.data.frame(cbind(ys, idx)) 
+  mean_diff [i] <- mean(subset(yy, idx<=8)$ys) - mean(subset(yy, idx>8)$ys)
+}
+hist(mean_diff, breaks=30)
+```
+
+#3. Bootstraping of Yertle turtles
+
+Again, wikipedia is a very good source. Here is the [quote][3]: 
+In statistics, bootstrapping can refer to any test or metric that relies on _random sampling with replacement_. Bootstrapping allows assigning measures of accuracy (defined in terms of bias, variance, confidence intervals, prediction error or some other such measure) to sample estimates. This technique allows estimation of the sampling distribution of almost any statistic using random sampling methods. Generally, it falls in the broader class of *resampling* methods.
+
+```{r, warning=FALSE}
+yertle <- c(48, 24, 32, 61, 51, 12, 32, 18, 19, 24, 21, 41, 29, 21, 25, 23, 42, 18, 23, 13)
+
+# Calculate the sample mean and standard error
+# standard error
+yertle.mean <- mean(yertle)
+yertle.se <- sqrt(var(yertle)/(length(yertle)-1))
+
+y.sample <- NULL
+ymean <- NULL
+yse <- NULL
+N <- 10000
+# draw 20 samples out of the distribution and
+# repeated 10,000 times
+# as the deck told, it is also possible to draw some of the samples and 
+# then replace part of the existing sample data with the resampled data
+# have heard and read way too many sample and simulation related articles
+# still ... darn
+for (i in 1:N) {
+    y.sample[i] <-rnorm(20, yertle.mean, yertle.se)
+}
+mean(y.sample)
+sd(y.sample)
+hist(y.sample, breaks=50)
+```
+
+#4. RMSE and Cross Validation
+Both a commonly used procedure to calcuate the error rate of the model.
+if you are interested, I have an Azure ML experiment for Edx Data Science and Machine Learning Course Lab1 published [here][4] for comparing the Bayesian Linear Regression and Classical Regression. (disclaimer: it was created for fun, not for real consumption, I was able to do that because the course does not score labs.. yeee)
+
+I just love this picture of explaining the type of errors.  
+
+![Type I Error and Type II Error](type-i-and-type-ii-errors.jpg)
+
+
+
+[1]: https://speakerdeck.com/jakevdp/statistics-for-hackers
+[2]: https://en.wikipedia.org/wiki/Bayes_factor
+[3]: https://en.wikipedia.org/wiki/Bootstrapping_(statistics)
+[4]: https://t.co/XROnTIOM0r

@@ -1,0 +1,39 @@
+---
+title: "bias variance tradeoff"
+author: "M. Liu"
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output: 
+  html_document:
+    theme: paper
+    includes:
+      in_header: ga_track.html
+---
+
+### learning bias-variance with model selection
+
+```{r}
+f <- rep("",5)
+f[1] <- "mpg ~ wt"
+f[2] <- "mpg ~ wt + hp"
+f[3] <- "mpg ~ wt + hp + qsec"
+f[4] <- "mpg ~ wt + hp + qsec + drat"
+f[5] <- "mpg ~ wt + hp + qsec + drat + cyl"
+y = mtcars$mpg
+yhat = matrix(0, nrow=32, ncol=5)
+for(i in 1:5){
+  m = lm(paste(f[i]), mtcars)
+ # print(summary(m))
+  cat(AIC(m))
+  yhat[,i] = predict(m, mtcars)
+}
+yhat.bar <- rowMeans(yhat)
+
+mse  <- colMeans((y-yhat)^2)
+bias <- colMeans((yhat - yhat.bar)^2)
+var  <- apply(yhat, 2, var)/nrow(yhat)
+
+plot(bias, ylim=c(0,10), type="l", lty=1, col="red", ylab="", xlab="# features", lwd=2)
+lines(var, type="l", lty=3, col="green", lwd=2)
+lines(mse, type="l", lty=5, col="blue", lwd=2)
+legend("topright", legend=c("bias", "variance", "error"), lty=c(1,3, 5), col=c("red", "green", "blue"), lwd=2)
+```

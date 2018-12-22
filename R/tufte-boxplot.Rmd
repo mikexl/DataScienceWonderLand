@@ -1,0 +1,9 @@
+### tufte style boxplot
+
+```{r}
+attach(mtcars)
+boxplot(mpg~cyl, horizontal = F, main = "", xlab = "cylinder", ylab = "miles per gallon", 
+        pars = list(boxcol = "white", medlty = "blank", medpch=16, medcex = 1.3, 
+                    whisklty = c(1, 1), staplelty = "blank", outcex = 0.5), axes = FALSE)
+
+```

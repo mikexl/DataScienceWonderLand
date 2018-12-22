@@ -1,0 +1,55 @@
+---
+title: "Learning Deep Learning"
+author: "M. Liu"
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output: 
+  html_document:
+    theme: paper
+    includes:
+      in_header: ga_track.html
+---
+
+```{r setup, include=FALSE}
+```
+
+### MOOC
+1. [Deep Learning .ai][1], be prepared for a lot of math
+2. [Fast AI][2], be ready to roll your sleeves and code in python, current is based on pytorch
+3. [Google Machine Learning Crash Crouse][3]
+4. [Udacity - Intro to deep learning with pytorch][4]
+5. [Edx - Reinforcement Learning Explained][5]
+6. [AWS Machine Learning][6]
+7. [Kaggle Learn][7]
+8. [Reproducible Research][8] (part of data science specialization)
+9. [Developing Data Product][9] (part of data science specialization)
+
+
+### Resources
+1. Tensorflow, harder to use when it is introduced, getting better
+2. PyTorch, very pythonic
+3. sk-learn, not a fan, but worth to mention
+4. xgboost, gbm
+
+### Topics
+1. data preparation, transformation, imputation, normalization
+2. model comparison, evaluation
+3. model interpretability
+4. productionization and reproducibility
+5. AutoML is a thing, worth look into
+
+### Recommendations
+Write your own perceptron, loss function, optimizer, etc. for an plain vanilla network to get started.   
+And then get into imagine recognition, speech recognition, time series, RL with existing libraries.   
+And also be ready to read research papers, heck lotsa papers. :=)  
+Do an kaggle competition!
+
+
+[1]: https://www.deeplearning.ai/
+[2]: http://fast.ai
+[3]: https://developers.google.com/machine-learning/crash-course/ml-intro
+[4]: https://www.udacity.com/course/deep-learning-pytorch--ud188
+[5]: https://www.edx.org/course/reinforcement-learning-explained-2
+[6]: https://aws.amazon.com/training/learning-paths/machine-learning/
+[7]: https://www.kaggle.com/learn/overview
+[8]: https://www.coursera.org/learn/reproducible-research
+[9]: https://www.coursera.org/learn/data-products

@@ -1,0 +1,198 @@
+---
+title: "Reinforcement Learning Learning Notes"
+author: "M."
+date: '`r format(Sys.Date(), "%d %B, %Y")`'
+output: 
+  html_document:
+    theme: paper
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## M1: Introduction
+The fundermental idea of reinforcement learning is from Thorndike's cat puzzle box experiment, yes, another cat in the box.
+Who wouldn't love cat.
+
+[![IMAGE ALT TEXT HERE](http://img.youtube.com/vi/fanm--WyQJo/0.jpg)](https://www.youtube.com/watch?v=fanm--WyQJo)
+
+> Behaviour changes because of consequences.
+
+Two type of RL _Tasks_: 
+episodic such as tic tac toe that has and terminate state, 
+or continuing one, such as smart thermometer that continuously runs to tune the temperature to keep peeps happy or irrate when set it wrong.
+
+RL challenges:  
+
+* Representation  
+* Generalization  
+* Exploration  
+* Temporal credit assignment  
+
+
+> The key to artificial intelligence has always been the representation. - _Jeff Hawkins_
+
+
+## M2: Exploration
+The "explore-exploit", the principle of "optimism in the face of uncertainty"
+
+### Bandit
+
+![](/tmp/candy-jackpot-slot-machine-800x800.png)   
+
+The smarter A/B testing could benefit here from Multi-Armed Bandit (MAB) framework. Or an application of drug trial.
+
+Algorithms:  
+* round robin  
+* greedy   
+* $\epsilon$ greedy  
+* Upper Confidence Bound (UCB)     
+* Contextual Bandit LinUCB  
+
+### Regret and discounted return
+
+Regret is to quantify the loss or "price of information", or opportunity loss, another form of $y-\hat{y}$, sort of.
+
+Discounted return 
+$$ G_{t} = R_{t+1} + \gamma R_{t+2} + ... + \gamma ^{t-1} R_{t} $$
+Greedy and $\epsilon$-greedy has linear regret $L_{t} \ge Const \cdot T$  
+
+
+### A/B/n experiments
+I'll focus more on _UCB1_ (classy or bayesian) and _Thompson Sampling_ techniques, as these are the two main ones used for A/B/n testing.
+
+UCB - Upper confidence Bound Algorithm
+$$ a_{t} = argmax \{ \hat{r}_{a} + \sqrt \frac {2 log t}{n_{a}} \} $$
+UCB1 achieves logarithmic regret $L_{t} \le Const \cdot logT$  
+
+To implement UCB1
+```{r eval=FALSE}
+  # x succsess of trials,     for instance, c(3,5,2)
+  # n total number of trials, for instance, c(10, 10, 10)
+  # otherwise interpret as 
+  # n being number of pulls of the bandit arm
+  # x being the reward from each arm
+  # t is the time period, usually default to 1 if cumulative x and n is taken
+  UCB <- x/n + sqrt(2*log(t)/n)
+  choose.arm <- which.max(UCB)
+```
+
+Posterior Sampling
+$$ \hat\theta_{k} \sim beta(\alpha_{k}, \beta_{k}) $$
+
+$$ \theta = max(\hat\theta_{k}) $$
+$$ k = argmax(\hat\theta{k}) $$
+$$ reward_{t} \sim Bernoulli(p = \theta) $$
+$$ \alpha_{k}, \beta_{k} \leftarrow \alpha_{k} + reward, \beta_{k} + 1 - reward $$
+$k$ represent the arm.
+
+```{r eval=FALSE}
+  # x succsess of trials,     for instance, c(3,5,2)
+  # n total number of trials, for instance, c(10, 10, 10)
+  # otherwise interpret as 
+  # n being number of pulls of the bandit arm
+  # x being the reward from each arm
+  # default is beta-bernoulli distribution
+  # normal-normal and gamma-poisson available in comments
+  thompson <- function(x, n, prior.alpha=1, prior.beta=1) {
+    k <- length(x)
+    n.draw <- 10000
+    ans <- matrix(nrow=n.draw, ncol=k)
+    for(i in 1:k){
+        ans[,i] <- rbeta(n.draw, x[i] + prior.alpha, n[i]-x[i]+prior.beta)
+        # ans[,i] <- rnorm(n.draw, mean = x[i]/n[i], sd = x[i]/sqrt(n[i]))
+        # ans[,i] <- rgamma(n.draw, shape = x[i] + 1, scale = 1/n[i])
+    }
+    w <- table(factor(max.col(ans), levels=1:k))
+    as.vector(w/sum(w))
+  }
+```
+
+![](updating2.png)
+
+[image credit][https://dataorigami.net/blogs/napkin-folding/79031811-multi-armed-bandits]
+
+
+## M3: Temporal Credit Assignment
+### markov decision process
+
+### value function and policy
+Value function, function of state, or state-action pairs.
+Value function can be learnt from experience. 
+_insert bellman equation_
+Policy $\pi$, a mapping from state to probability of selection each available action
+
+## M4: Dynamnic Programming
+
+* use value function to organize and struture the search for good policy
+* turn Bellman equations into iterative updates
+
+$$V(x_{0}) = max \sum_{t=0}^{\infty}\beta^tF(x_{t}, a_{t})$$
+
+$$ V(x) = max \{F(x, a) + \beta V(T(x, a))\} $$
+
+## M5: Model-free learning
+
+### Monte Carlo Learning 
+
+$$ E[X] = \frac{1}{n} \sum_{i=1}^{n} x_{i} $$
+
+
+$$ v_{\pi(s)} = E_{\pi} [G_{t}|S_{t}=s] $$
+Monte Carlo takes means of episodes.
+
+### Temporal Difference Learning  
+
+## M6: Representation and Generalization - Function Approximation
+
+trade off between sample efficient learning vs generality
+
+### Linear function approximators  
+### Deep Q-Learning (DQN)  
+### Double DQN  
+
+
+## M7: Policy Gradient
+
+Doesn't care about value functions, DP or models, only cares about finding $\theta$ that maximizes rewards.
+
+### Further Readings
+
+* Thorndike’s puzzle boxes and the origins of the experimental analysis of behavior (Chance, 1999): https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1284753/pdf/jeabehav007200300433.pdf
+* Animal intelligence : an experimental study of the associative processes in animals (Thorndike, 1898): https://archive.org/details/animalintelligen00thoruoft
+
+*  UCB: https://jeremykun.com/2013/10/28/optimism-in-the-face-of-uncertainty-the-ucb1-algorithm/
+*  Thompson sampling: https://dataorigami.net/blogs/napkin-folding/79031811-multi-armed-bandits
+*  Finite-time Analysis of the Multi-armed Bandit Problem, Auer et al http://dl.acm.org/citation.cfm?id=599677
+*  An Empirical Evaluation of Thompson Sampling, Chapelle and Li https://papers.nips.cc/paper/4321-an-empirical-evaluation-of-thompson-sampling
+*  Tutorial, Dave Silver http://www0.cs.ucl.ac.uk/staff/D.Silver/web/Teaching_files/XX.pdf
+
+
+* Decision Service http://ds.microsoft.com
+*  Tutorial: http://hunch.net/~exploration_learning/
+*  http://www.stat.berkeley.edu/~bartlett/courses/2014fall-cs294stat260/readings.html
+*  LinUCB: https://arxiv.org/pdf/1003.0146.pdf
+
+
+* Reinforcement Learning – An Introduction (Sutton and Barto, 2017):
+*  http://www.incompleteideas.net/sutton/book/the-book-2nd.html
+*  Part II: approximate solution methods + references
+* Algorithms for Reinforcement Learning (Szepesvári, 2010). Synthesis Lectures on Artificial Intelligence and Machine Learning
+
+* Mnih, V., Kavukcuoglu, K., Silver, D., Rusu, A. A., Veness, J., Bellemare, M.G., … Hassabis, D. (2015). Human-level control through deep reinforcement learning. Nature, 518(7540), 529–533.
+*  Introduce DQN, breakthrough result on learning to play Atari from pixels
+* Riedmiller, M. (2005). Neural Fitted Q Iteration – First Experiences with a Data Efficient Neural Reinforcement Learning Method. ECML 2005, 317-328.
+*  Propose use of neural nets for Q-learning, Rprop optimizer – promising results
+
+
+*  van Hasselt, H., Guez, A., & Silver, D. (2016). Deep Reinforcement Learning with Double Q-learning. AAAI 2016, 2094-2100 http://arxiv.org/abs/1509.06461
+* Schaul, T., Quan, J., Antonoglou, I., Silver, D. (2016). Prioritized Experience Replay. ICLR 2016 https://arxiv.org/abs/1511.05952
+* Arulkumaran, K., Deisenroth, M. P., Brundage, M., & Bharath, A. A. (2017). A Brief Survey of Deep Reinforcement Learning. IEEE SPM Special Issue on Deep Learning for Visual Understanding http://arxiv.org/abs/1708.05866
+
+
+* Pieter Abbeel's lecture on PGAC https://sites.google.com/view/deep-rl-bootcamp/lectures
+* Andrej Karpathy's blogpost Pong from Pixels http://karpathy.github.io/2016/05/31/rl/
+* Jan Peter's article http://www.scholarpedia.org/article/Policy_gradient_methods
+* Simple statistical gradient-following algorithms for connectionist reinforcement learning by Williams, 1992
